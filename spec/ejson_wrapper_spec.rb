@@ -34,7 +34,7 @@ RSpec.describe EJSONWrapper do
       expect(decrypted_secrets[:secret]).to eq 'sssh!'
     end
 
-    context 'when the ejson file has a _private_key_enc key and use_kms=true' do
+    context 'when the ejson file has a _private_key_enc key and use_kms: true' do
       let(:ejson_contents) { %'{"_public_key":"#{public_key}","secret":"#{encrypted_secret}", "_private_key_enc": "#{private_key_enc}"}' }
       let(:private_key_enc) { "priv-key-enc" }
 
