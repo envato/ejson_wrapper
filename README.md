@@ -22,19 +22,19 @@ Or install it yourself as:
 
 ```
 # Private key is in /opt/ejson/keys
-EJSON.decrypt('myfile.ejson')
+EJSONWrapper.decrypt('myfile.ejson')
 => { :my_api_key => 'secret' }
 
 # Private key is in /alternate/key/dir
-EJSON.decrypt('myfile.ejson', key_dir: 'alternate/key/dir')
+EJSONWrapper.decrypt('myfile.ejson', key_dir: 'alternate/key/dir')
 => { :my_api_key => 'secret' }
 
 # Private key is in memory
-EJSON.decrypt('myfile.ejson', private_key: 'be8597abaa68bbfa23193624b1ed5e2cd6b9a8015e722138b23ecd3c90239b2d')
+EJSONWrapper.decrypt('myfile.ejson', private_key: 'be8597abaa68bbfa23193624b1ed5e2cd6b9a8015e722138b23ecd3c90239b2d')
 => { :my_api_key => 'secret' }
 
 # Private key is stored inside the ejson file itself as _private_key_enc (encrypted with KMS & Base64 encoded)
-EJSON.decrypt('myfile.ejson', use_kms: true)
+EJSONWrapper.decrypt('myfile.ejson', use_kms: true)
 => { :my_api_key => 'secret' }
 ```
 
