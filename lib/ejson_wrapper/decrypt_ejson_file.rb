@@ -31,7 +31,7 @@ module EJSONWrapper
     def ejson_env(key_dir)
       {
         'EJSON_KEYDIR' => key_dir
-      }.select { |v| !v.nil? }
+      }.select { |_, v| !v.nil? }
     end
 
     def parse_json(decrypted_json)

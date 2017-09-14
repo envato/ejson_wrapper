@@ -34,6 +34,13 @@ RSpec.describe EJSONWrapper do
       expect(decrypted_secrets[:secret]).to eq 'sssh!'
     end
 
+    it "doesn't supply a key dir env var when it's not supplied as an argument" do
+      decrypted_secrets = '{"api_key_1": "my-secret-api-key"}'
+      allow(Open3).to receive(:capture2).and_return([decrypted_secrets, double(success?: true)])
+      decrypt(ejson_tempfile.path)
+      expect(Open3).to have_received(:capture2).with({}, 'ejson', 'decrypt', ejson_tempfile.path, {})
+    end
+
     context 'when the ejson file has a _private_key_enc key and use_kms: true' do
       let(:ejson_contents) { %'{"_public_key":"#{public_key}","secret":"#{encrypted_secret}", "_private_key_enc": "#{private_key_enc}"}' }
       let(:private_key_enc) { "priv-key-enc" }
