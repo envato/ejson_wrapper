@@ -20,6 +20,8 @@ Or install it yourself as:
 
 ## Usage
 
+### Decrypting EJSON files
+
 ```
 # Private key is in /opt/ejson/keys
 EJSONWrapper.decrypt('myfile.ejson')
@@ -36,6 +38,16 @@ EJSONWrapper.decrypt('myfile.ejson', private_key: 'be8597abaa68bbfa23193624b1ed5
 # Private key is stored inside the ejson file itself as _private_key_enc (encrypted with KMS & Base64 encoded)
 EJSONWrapper.decrypt('myfile.ejson', use_kms: true, region: 'ap-southeast-2')
 => { :my_api_key => 'secret' }
+```
+
+### Generating EJSON files
+
+```
+$ ejson_wrapper generate --region ap-southeast-2 --kms-key-id [key_id] --file file.ejson
+Generated EJSON file file.ejson
+
+$ cat file.ejson
+{"_public_key":"4f2dece08e26cf18f12275f203e717a5b39d8e187ee0767a46e5e007ea437c0a","_private_key_enc":"[snip]==\n"}
 ```
 
 ## Development
