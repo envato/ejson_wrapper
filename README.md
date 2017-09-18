@@ -34,7 +34,7 @@ EJSONWrapper.decrypt('myfile.ejson', private_key: 'be8597abaa68bbfa23193624b1ed5
 => { :my_api_key => 'secret' }
 
 # Private key is stored inside the ejson file itself as _private_key_enc (encrypted with KMS & Base64 encoded)
-EJSONWrapper.decrypt('myfile.ejson', use_kms: true)
+EJSONWrapper.decrypt('myfile.ejson', use_kms: true, region: 'ap-southeast-2')
 => { :my_api_key => 'secret' }
 ```
 
