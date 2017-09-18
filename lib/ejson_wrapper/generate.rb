@@ -8,7 +8,7 @@ module EJSONWrapper
     def call(region:, kms_key_id:, file:)
       public_key, private_key = *keygen
       encrypted_private_key = encrypt_with_kms_key(region, kms_key_id, private_key)
-      ejson_file = JSON.dump(
+      ejson_file = JSON.pretty_generate(
         '_public_key' => public_key,
         '_private_key_enc' => encrypted_private_key
       )
