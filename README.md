@@ -47,7 +47,7 @@ $ ejson_wrapper generate --region ap-southeast-2 --kms-key-id [key_id] --file fi
 Generated EJSON file file.ejson
 
 $ cat file.ejson
-{"_public_key":"4f2dece08e26cf18f12275f203e717a5b39d8e187ee0767a46e5e007ea437c0a","_private_key_enc":"[snip]==\n"}
+{"_public_key":"[public_key]","_private_key_enc":"[encrypted_private_key]"}
 ```
 
 ## Development
