@@ -30,7 +30,7 @@ EOS
   it 'writes an ejson file' do
     ejson = {
       '_public_key' => public_key,
-      '_private_key_enc' => Base64.encode64(private_key_enc)
+      '_private_key_enc' => Base64.encode64(private_key_enc).strip
     }
     expect(File).to have_received(:write).with(file, JSON.dump(ejson))
   end

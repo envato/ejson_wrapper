@@ -40,7 +40,7 @@ module EJSONWrapper
         key_id: key_id,
         plaintext: plaintext
       )
-      Base64.encode64(response.ciphertext_blob)
+      Base64.encode64(response.ciphertext_blob).strip
     end
   end
 end
