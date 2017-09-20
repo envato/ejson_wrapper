@@ -1,0 +1,56 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "ejson_wrapper"
+
+require 'optparse'
+
+options = {
+  region: nil,
+  kms_key_id: nil
+}
+option_parser = OptionParser.new do |opts|
+  opts.banner = 'Usage: ejson_wrapper generate [options]'
+
+  opts.on('--region R', String, 'AWS Region') do |v|
+    options[:region] = v
+  end
+
+  opts.on('--kms-key-id K', String, 'KMS Key ID') do |v|
+    options[:kms_key_id] = v
+  end
+
+  opts.on('--file F', String, 'EJSON file to write') do |v|
+    options[:file] = v
+  end
+end
+
+command = ARGV[0]
+unless command == 'generate'
+  STDERR.puts option_parser.banner
+  exit 1
+end
+
+option_parser.parse!
+
+if options[:region].nil?
+  STDERR.puts "Missing --region option"
+  STDERR.puts option_parser
+  exit 1
+end
+
+if options[:kms_key_id].nil?
+  STDERR.puts "Missing --kms-key-id option"
+  STDERR.puts option_parser
+  exit 1
+end
+
+if options[:file].nil?
+  STDERR.puts "Missing --file option"
+  STDERR.puts option_parser
+  exit 1
+end
+
+EJSONWrapper.generate(region: options[:region],
+                      kms_key_id: options[:kms_key_id],
+                      file: options[:file])
