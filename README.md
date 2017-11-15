@@ -22,6 +22,8 @@ Or install it yourself as:
 
 ### Decrypting EJSON files
 
+From Ruby:
+
 ```
 # Private key is in /opt/ejson/keys
 EJSONWrapper.decrypt('myfile.ejson')
@@ -38,6 +40,20 @@ EJSONWrapper.decrypt('myfile.ejson', private_key: 'be8597abaa68bbfa23193624b1ed5
 # Private key is stored inside the ejson file itself as _private_key_enc (encrypted with KMS & Base64 encoded)
 EJSONWrapper.decrypt('myfile.ejson', use_kms: true, region: 'ap-southeast-2')
 => { :my_api_key => 'secret' }
+```
+
+Command line:
+
+```
+# decrypt all
+$ ejson_wrapper decrypt --file file.ejson --region us-east-1
+{
+  "datadog_api_token": "[datadog_api_token]"
+}
+
+# decrypt & extract a specific secret
+$ ejson_wrapper decrypt --file file.ejson --region us-east-1 --secret datadog_api_token
+[datadog_api_token]
 ```
 
 ### Generating EJSON files
