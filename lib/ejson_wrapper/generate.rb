@@ -24,7 +24,7 @@ module EJSONWrapper
     end
 
     def invoke_ejson_keygen
-      stdout, status = Open3.capture2('ejson', 'keygen')
+      stdout, status = Open3.capture2e('ejson', 'keygen')
       raise KeygenFailed, stdout unless status.success?
       stdout
     end

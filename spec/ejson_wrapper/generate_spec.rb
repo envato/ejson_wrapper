@@ -19,7 +19,7 @@ EOS
     allow(File).to receive(:write)
     allow(Aws::KMS::Client).to receive(:new).and_return(kms_client)
     allow(kms_client).to receive(:encrypt).and_return(encrypt_response)
-    allow(Open3).to receive(:capture2).with('ejson', 'keygen').and_return([ejson_keygen, double(:'success?' => true)])
+    allow(Open3).to receive(:capture2e).with('ejson', 'keygen').and_return([ejson_keygen, double(:'success?' => true)])
     described_class.new.call(region: 'ap-southeast-2', kms_key_id: key_id, file: file)
   end
 
