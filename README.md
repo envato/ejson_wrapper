@@ -1,6 +1,6 @@
 # EJSON Wrapper
 
-Wraps the [`ejson`](https://github.com/Shopify/ejson) program to safely execute it and parse the resulting JSON. Additionally it offers a feature to encrypt/decrypt private key with AWS KMS (stored as `_private_key_enc` in EJSON file).
+Wraps the [`ejson`](https://github.com/Shopify/ejson) program to safely execute it and parse the resulting JSON. Additionally it offers a feature to encrypt/decrypt secrets with encrypted private key using AWS KMS.
 
 ## Prerequisites
 
