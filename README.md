@@ -100,14 +100,14 @@ $ cat myfile.ejson
 
 You now can add secrets into the EJSON file, in following example `my_api_key` in plaintext entry is added:
 
-``
+```
 # myfile.ejson
 {
   "_public_key": "[public_key]",
   "_private_key_enc":"[base64_encoded_encrypted_private_key]",
   "my_api_key": "plaintext"
 }
-``
+```
 
 to encrypt the secrets, run following command:
 
