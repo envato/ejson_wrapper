@@ -64,42 +64,60 @@ $ ejson_wrapper decrypt --file file.ejson --region us-east-1 --secret my_api_key
 
 ### Generating EJSON files
 
-Ensure your application has [AWS IAM Permission to encrypt with KMS](https://docs.aws.amazon.com/kms/latest/developerguide/iam-policies.html#iam-policy-example-encrypt-decrypt-specific-cmks) and your EJSON file must contain public key and unencrypted private key in `_public_key` and `_private_key_env` respectively.
+Ensure your application has [AWS IAM Permission to encrypt with KMS](https://docs.aws.amazon.com/kms/latest/developerguide/iam-policies.html#iam-policy-example-encrypt-decrypt-specific-cmks).
 
-```
-$ cat myfile.ejson
-{
-  "_public_key": "[public_key]",
-  "_private_key_enc":"[unencrypted_private_key]",
-  "my_secret": "secret"
-}
-```
+Firstly, the EJSON is generated to have public key and Base64 encoded & encrypted private key in `_public_key` and `_private_key_enc` respectively with:
 
-In Ruby code:
-
-```
-# Generate encrypted EJSON file (overwritting the unencrypted EJSON file)
-EJSONWrapper.generate(region: 'AWS_REGION', kms_key_id: 'key_id', file: 'myfile.ejson')
-=> Generated EJSON file myfile.ejson
-```
-
-OR
-
-Command line:
+Using CLI:
 
 ```
 $ ejson_wrapper generate --region $AWS_REGION --kms-key-id [key_id] --file myfile.ejson
 Generated EJSON file myfile.ejson
 ```
 
-To verify, check to see `_private_key_enc` and other secrets are encrypted:
+OR Ruby code:
+
+```
+# Generate encrypted EJSON file (overwritting the unencrypted EJSON file)
+EJSONWrapper.generate(region: ENV['AWS_REGION'], kms_key_id: 'key_id', file: 'myfile.ejson')
+=> Generated EJSON file myfile.ejson
+```
+
+Verify to ensure the new file contain the two required keys:
 
 ```
 $ cat myfile.ejson
 {
   "_public_key": "[public_key]",
-  "_private_key_enc":"[encrypted_private_key]",
-  "my_secret": "encrypted_secret"
+  "_private_key_enc":"[base64_encoded_encrypted_private_key]",
+}
+```
+
+You now can add secrets into the EJSON file, in following example, `my_api_key` in plaintext entry is added:
+
+``
+# myfile.ejson
+{
+  "_public_key": "[public_key]",
+  "_private_key_enc":"[base64_encoded_encrypted_private_key]",
+  "my_api_key": "plaintext"
+}
+``
+
+to encrypt the secrets, run following command:
+
+```
+$ ejson encrypt myfile.ejson
+```
+
+Verify to ensure the secret is encrypted correctly:
+
+```
+$ cat myfile.ejson
+{
+  "_public_key": "[public_key]",
+  "_private_key_enc":"[base64_encoded_encrypted_private_key]",
+  "my_api_key": "encrypted_secret"
 }
 ```
 
