@@ -2,6 +2,11 @@
 
 Wraps the [`ejson`](https://github.com/Shopify/ejson) program to safely execute it and parse the resulting JSON. Additionally it offers a feature to encrypt/decrypt private key with AWS KMS (stored as `_private_key_enc` in EJSON file).
 
+## Prerequisites
+
+* [`ejson`](https://github.com/Shopify/ejson) application
+* Path to `ejson` binary is included in `PATH` environment variable
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -93,7 +98,7 @@ $ cat myfile.ejson
 }
 ```
 
-You now can add secrets into the EJSON file, in following example, `my_api_key` in plaintext entry is added:
+You now can add secrets into the EJSON file, in following example `my_api_key` in plaintext entry is added:
 
 ``
 # myfile.ejson
