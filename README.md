@@ -1,6 +1,11 @@
-# EjsonWrapper
+# EJSON Wrapper
 
-Wraps the EJSON go program to safely execute it and parse the resulting JSON.
+Wraps the [`ejson`](https://github.com/Shopify/ejson) program to safely execute it and parse the resulting JSON. Additionally it offers a feature to encrypt/decrypt secrets with encrypted private key using AWS KMS.
+
+## Prerequisites
+
+* [`ejson`](https://github.com/Shopify/ejson) application
+* Path to `ejson` binary is included in `PATH` environment variable
 
 ## Installation
 
@@ -12,17 +17,23 @@ gem 'ejson_wrapper'
 
 And then execute:
 
-    $ bundle
+```
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install ejson_wrapper
+```
+$ gem install ejson_wrapper
+```
 
 ## Usage
 
 ### Decrypting EJSON files
 
-From Ruby:
+Ensure your application has [AWS IAM Permission to decrypt with KMS](https://docs.aws.amazon.com/kms/latest/developerguide/iam-policies.html#iam-policy-example-encrypt-decrypt-specific-cmks).
+
+In Ruby code:
 
 ```
 # Private key is in /opt/ejson/keys
@@ -48,24 +59,70 @@ Command line:
 # decrypt all
 $ ejson_wrapper decrypt --file file.ejson --region us-east-1
 {
-  "datadog_api_token": "[datadog_api_token]"
+  "my_api_key": "[secret]"
 }
 
 # decrypt & extract a specific secret
-$ ejson_wrapper decrypt --file file.ejson --region us-east-1 --secret datadog_api_token
-[datadog_api_token]
+$ ejson_wrapper decrypt --file file.ejson --region us-east-1 --secret my_api_key
+[secret]
 ```
 
 ### Generating EJSON files
 
-```
-$ ejson_wrapper generate --region ap-southeast-2 --kms-key-id [key_id] --file file.ejson
-Generated EJSON file file.ejson
+Ensure your application has [AWS IAM Permission to encrypt with KMS](https://docs.aws.amazon.com/kms/latest/developerguide/iam-policies.html#iam-policy-example-encrypt-decrypt-specific-cmks).
 
-$ cat file.ejson
+Firstly, the EJSON is generated to have public key and Base64 encoded & encrypted private key in `_public_key` and `_private_key_enc` respectively with:
+
+Using CLI:
+
+```
+$ ejson_wrapper generate --region $AWS_REGION --kms-key-id [key_id] --file myfile.ejson
+Generated EJSON file myfile.ejson
+```
+
+OR Ruby code:
+
+```
+# Generate encrypted EJSON file (overwritting the unencrypted EJSON file)
+EJSONWrapper.generate(region: ENV['AWS_REGION'], kms_key_id: 'key_id', file: 'myfile.ejson')
+=> Generated EJSON file myfile.ejson
+```
+
+Verify to ensure the new file contain the two required keys:
+
+```
+$ cat myfile.ejson
 {
   "_public_key": "[public_key]",
-  "_private_key_enc":"[encrypted_private_key]"
+  "_private_key_enc":"[base64_encoded_encrypted_private_key]",
+}
+```
+
+You now can add secrets into the EJSON file, in following example `my_api_key` in plaintext entry is added:
+
+```
+# myfile.ejson
+{
+  "_public_key": "[public_key]",
+  "_private_key_enc":"[base64_encoded_encrypted_private_key]",
+  "my_api_key": "plaintext"
+}
+```
+
+to encrypt the secrets, run following command:
+
+```
+$ ejson encrypt myfile.ejson
+```
+
+Verify to ensure the secret is encrypted correctly:
+
+```
+$ cat myfile.ejson
+{
+  "_public_key": "[public_key]",
+  "_private_key_enc":"[base64_encoded_encrypted_private_key]",
+  "my_api_key": "encrypted_secret"
 }
 ```
 
