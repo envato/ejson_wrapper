@@ -68,6 +68,15 @@ when 'decrypt'
   else
     puts JSON.pretty_generate(decrypted_secrets)
   end
+
+when 'reveal_key'
+  begin
+    puts EJSONWrapper.private_key_decrypted(options[:file], region: options[:region])
+  rescue Errno::ENOENT
+    STDERR.puts "Secrets file not found"
+    exit 1
+  end
+
 else
   STDERR.puts option_parser.banner
   exit 1
