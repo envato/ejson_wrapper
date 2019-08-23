@@ -14,7 +14,7 @@ module EJSONWrapper
     def call(ejson_file_path, region:)
       ejson_hash = JSON.parse(File.read(ejson_file_path))
       encrypted_private_key = ejson_hash.fetch(KEY) do
-        raise PrivateKeyNotFound, "Private key was not found in ejson file under key #{key}"
+        raise PrivateKeyNotFound, "Private key was not found in ejson file under key #{KEY}"
       end
       decrypt(Base64.decode64(encrypted_private_key), region: region)
     end
