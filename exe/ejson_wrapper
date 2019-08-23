@@ -10,7 +10,7 @@ options = {
   kms_key_id: nil
 }
 option_parser = OptionParser.new do |opts|
-  opts.banner = 'Usage: ejson_wrapper generate [options]'
+  opts.banner = 'Usage: ejson_wrapper {generate,decrypt,reveal_key} [options]'
 
   opts.on('--region R', String, 'AWS Region') do |v|
     options[:region] = v
