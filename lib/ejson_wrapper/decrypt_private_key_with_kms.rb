@@ -5,8 +5,8 @@ module EJSONWrapper
   PrivateKeyNotFound = Class.new(StandardError)
 
   class DecryptPrivateKeyWithKMS
-    def self.call(*args)
-      new.call(*args)
+    def self.call(file_path, **args)
+      new.call(file_path, **args)
     end
 
     KEY = '_private_key_enc'
