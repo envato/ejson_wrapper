@@ -10,7 +10,7 @@ options = {
   kms_key_id: nil
 }
 option_parser = OptionParser.new do |opts|
-  opts.banner = 'Usage: ejson_wrapper {generate,decrypt,reveal_key} [options]'
+  opts.banner = 'Usage: ejson_wrapper {generate,decrypt,reveal_key,rotate_key} [options]'
 
   opts.on('--region R', String, 'AWS Region') do |v|
     options[:region] = v
@@ -26,6 +26,10 @@ option_parser = OptionParser.new do |opts|
 
   opts.on('--secret S', String, 'Secret to extract') do |v|
     options[:secret] = v
+  end
+
+  opts.on('--create-key C', TrueClass, "Set to true to create a new key for key rotation") do |v|
+    options[:create_key] = v
   end
 end
 
@@ -74,6 +78,17 @@ when 'reveal_key'
     puts EJSONWrapper.private_key_decrypted(options[:file], region: options[:region])
   rescue Errno::ENOENT
     STDERR.puts "Secrets file not found"
+    exit 1
+  end
+
+when 'rotate_key'
+  if options[:create_key]
+    EJSONWrapper.rotate_key(options[:file], options[:region], create_key: options[:create_key])
+  elsif options[:kms_key_id]
+    EJSONWrapper.rotate_key(options[:file], options[:region], kms_key_id: options[:kms_key_id])
+  else
+    STDERR.puts "ERROR: Missing option, use either --create-key true or --kms-key-id option"
+    STDERR.puts option_parser
     exit 1
   end
 
