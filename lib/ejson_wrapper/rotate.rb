@@ -19,6 +19,7 @@ module EJSONWrapper
       stdout, status = Open3.capture2e(*cmd)
       if !status.success? then
         STDERR.puts "Encrypting failed: #{status} #{stdout}. Not replacing old file"
+        File.delete(new_ejson_file)
       else
         STDOUT.puts "Encryption succeeded for #{new_ejson_file}. Replacing old file"
         File.delete(ejson_file)
