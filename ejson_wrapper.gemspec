@@ -29,4 +29,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "ejson"
   spec.add_dependency "aws-sdk-kms"
+  spec.add_dependency "base64"
 end
